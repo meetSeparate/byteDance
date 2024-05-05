@@ -116,3 +116,94 @@ class RecruitType(models.Model):
 
     class Meta:
         verbose_name_plural = '类型'
+
+
+class Resume(models.Model):
+    nid = models.AutoField(primary_key=True)
+    user_id = models.IntegerField(verbose_name='用户id')
+    name = models.CharField(verbose_name='用户姓名', max_length=256)
+    phone = models.CharField(verbose_name='联系方式', max_length=256)
+    email = models.CharField(verbose_name='邮箱', max_length=256)
+    school = models.CharField(verbose_name='学校', max_length=256)
+    degree = models.CharField(verbose_name='学历', max_length=256)
+    profession = models.CharField(verbose_name='专业', max_length=256, null=True, blank=True)
+    duration = models.CharField(verbose_name='持续时间', max_length=256)
+
+    work_info = models.ManyToManyField(
+        to='WorkInfo',
+        verbose_name='工作经历'
+    )
+    project_info = models.ManyToManyField(
+        to='ProjectInfo',
+        verbose_name='项目经历'
+    )
+    change_date = models.DateTimeField(verbose_name='修改时间', auto_now=True)
+
+    def __str__(self):
+        return str(self.name)
+
+    class Meta:
+        verbose_name_plural = '简历'
+
+
+class WorkInfo(models.Model):
+    nid = models.AutoField(primary_key=True)
+    company = models.CharField(verbose_name='公司名称', max_length=256)
+    position = models.CharField(verbose_name='职位', max_length=256)
+    duration = models.CharField(verbose_name='持续时间', max_length=256)
+    description = models.TextField(verbose_name='描述', null=True, blank=True)
+    types = models.CharField(verbose_name='工作类别', default='正式', max_length=256)
+
+    def __str__(self):
+        return str(self.company)
+
+    class Meta:
+        verbose_name_plural = '工作经历'
+
+
+class ProjectInfo(models.Model):
+    nid = models.AutoField(primary_key=True)
+    title = models.CharField(verbose_name='项目名称', max_length=256)
+    role = models.CharField(verbose_name='项目角色', max_length=256)
+    duration = models.CharField(verbose_name='持续时间', max_length=256)
+    link = models.CharField(verbose_name='项目链接', max_length=256, null=True)
+    description = models.TextField(verbose_name='描述')
+
+    def __str__(self):
+        return str(self.title)
+
+    class Meta:
+        verbose_name_plural = '项目经历'
+
+
+class Delivery(models.Model):
+    user_id = models.IntegerField(verbose_name='用户id')
+    job_id = models.IntegerField(verbose_name='岗位id')
+    status_choice = (
+        ('简历筛选', '简历筛选'),
+        ('待检阅', '待检阅'),
+        ('面试中', '面试中'),
+        ('待签约', '待签约'),
+        ('已结束', '已结束')
+    )
+    status = models.CharField(verbose_name='投递状态', max_length=256, default='简历筛选', choices=status_choice)
+    create_date = models.DateTimeField(verbose_name='投递时间', auto_now_add=True)
+
+    def __str__(self):
+        return str(self.user_id)
+
+    class Meta:
+        verbose_name_plural = '投递记录'
+
+
+class ResumeFile(models.Model):
+    nid = models.AutoField(primary_key=True)
+    user_id = models.IntegerField(verbose_name='用户id')
+    file = models.FileField(verbose_name='简历文件', upload_to='resume/')
+    create_date = models.DateTimeField(verbose_name='上传时间', auto_now_add=True)
+
+    def __str__(self):
+        return str(self.user_id)
+
+    class Meta:
+        verbose_name_plural = '简历文件'

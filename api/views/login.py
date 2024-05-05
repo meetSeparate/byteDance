@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.serializers import UserInfoSerializer
 from django.contrib import auth
 from rest_framework.authtoken.models import Token
 from api.models import UserInfo
@@ -26,6 +25,7 @@ class LoginView(APIView):
         old_token = Token.objects.filter(user=user)
         old_token.delete()
         token = Token.objects.create(user=user)
+        auth.login(request, user)
         res['code'] = 200
         res['userid'] = user.nid
         res['username'] = user.username

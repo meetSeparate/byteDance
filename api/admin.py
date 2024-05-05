@@ -100,9 +100,41 @@ class RecruitTypeAdmin(admin.ModelAdmin):
     list_filter = ['type', 'en_type']
 
 
+class ResumeAdmin(admin.ModelAdmin):
+    list_display = ['nid', 'user_id', 'name', 'phone', 'email', 'school', 'degree', 'profession', 'duration']
+
+    list_filter = ['name','school', 'degree']
+
+    search_fields = ['profession']
+
+
+class WorkInfoAdmin(admin.ModelAdmin):
+    list_display = ['nid', 'company', 'position', 'duration', 'description', 'types']
+
+    list_filter = ['company', 'position', 'types']
+
+
+class ProjectInfoAdmin(admin.ModelAdmin):
+    list_display = ['nid', 'title', 'role', 'duration', 'link', 'description']
+
+    list_filter = ['role', 'title']
+
+    search_fields = ['title']
+
+
+class DeliveryAdmin(admin.ModelAdmin):
+    list_display = ['user_id', 'job_id', 'status', 'create_date']
+
+    list_filter = ['create_date']
+
+
 admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Job, JobAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(City, CategoryAdmin)
 admin.site.register(RecruitType, RecruitTypeAdmin)
+admin.site.register(Resume, ResumeAdmin)
+admin.site.register(WorkInfo, WorkInfoAdmin)
+admin.site.register(ProjectInfo, ProjectInfoAdmin)
+admin.site.register(Delivery, DeliveryAdmin)
